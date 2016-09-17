@@ -1,0 +1,11 @@
+[Unit]
+Description=Start and stop Tomcat
+
+[Service]
+Type=oneshot
+ExecStart=/etc/init.d/tomcat start
+ExecStop=/etc/init.d/tomcat stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

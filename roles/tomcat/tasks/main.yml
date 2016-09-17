@@ -1,0 +1,6 @@
+---
+
+- include: install-tomcat.yml
+  become: yes
+- include: configure-tomcat.yml
+  become: yes

@@ -1,0 +1,19 @@
+---
+
+- name: Create sonarqube group
+  group: name={{ sonarqube_group }}
+
+- name: Create sonarqube user
+  user: name={{ sonarqube_user }} group={{ sonarqube_group }}
+
+- name: Download zip file
+  get_url: url={{ sonarqube_url }} dest=/tmp/sonarqube.zip checksum="md5:{{ sonarqube_md5 }}"
+
+- name: Ensure apt repos up to date
+  apt: update_cache=yes
+
+- name: Ensure unzip is installed
+  apt: name=unzip
+
+- name: unzip files
+  unarchive: src=/tmp/sonarqube.zip dest={{ sonar_qube_install_location }} copy=no creates={{ sonarqube_install_dir }}

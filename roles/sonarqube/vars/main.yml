@@ -1,0 +1,15 @@
+---
+# vars file for sonarqube
+
+sonarqube_url: "https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.6.zip"
+sonarqube_md5: "841a92d83a4bcb13b5fe022e00c1e0b8"
+sonarqube_unzip_dir: "sonarqube-5.6"
+sonar_qube_install_location: "/var"
+sonarqube_install_dir: "{{ sonar_qube_install_location }}/{{ sonarqube_unzip_dir }}"
+sonarqube_user: "sonar"
+sonarqube_group: "sonar"
+
+postgres_user: "postgres"
+sonarqube_db_name: "sonar"
+sonarqube_db_user: "sonar"
+sonarqube_db_password: "sonar"

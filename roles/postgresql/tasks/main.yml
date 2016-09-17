@@ -1,0 +1,6 @@
+---
+# tasks file for postgresql
+- include: install-postgres.yml
+  become: yes
+
+- include: configure-progres.yml
