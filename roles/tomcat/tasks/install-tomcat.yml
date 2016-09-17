@@ -1,0 +1,23 @@
+---
+
+- name: create tomcat group
+  group: name=tomcat gid=515
+
+- name: create tomcat user
+  user: name=tomcat uid=515 group=tomcat
+
+- name: Get Tomcat files
+  get_url: url=http://mirrors.muzzy.org.uk/apache/tomcat/tomcat-8/v{{tomcat_version}}/bin/apache-tomcat-{{tomcat_version}}.tar.gz
+    dest=/tmp/apache-tomcat-{{tomcat_version}}.tar.gz checksum="sha1:{{tomcat_checksum}}"
+
+- name: Unzip Tomcat files
+  unarchive: copy=no dest=/tmp src=/tmp/apache-tomcat-{{tomcat_version}}.tar.gz creates=/tmp/apache-tomcat-{{tomcat_version}}
+
+- name: Ensure that /var/tomcat exists
+  file: state=directory path=/var/tomcat mode=750
+
+- name: Move Tomcat files to /var
+  shell: cp -Rf /tmp/apache-tomcat-{{tomcat_version}}/* /var/tomcat
+
+
+

@@ -1,0 +1,11 @@
+---
+
+- name: Create sonar db user on postgres
+  shell: psql --command="CREATE USER {{ sonarqube_db_user }} with CREATEDB PASSWORD '{{ sonarqube_db_password }}';"
+  become: yes
+  become_user: "{{ postgres_user }}"
+
+- name: Create sonar database
+  shell: createdb --username="{{ sonarqube_db_user }}" {{ sonarqube_db_name }}
+  become: yes
+  become_user: "{{ sonarqube_user }}"

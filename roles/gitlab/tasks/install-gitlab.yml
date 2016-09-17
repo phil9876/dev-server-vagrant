@@ -1,0 +1,35 @@
+---
+- name: Check if GitLab configuration file already exists.
+  stat: path=/etc/gitlab/gitlab.rb
+  register: gitlab_config_file
+
+- name: Check if GitLab is already installed.
+  stat: path=/usr/bin/gitlab-ctl
+  register: gitlab_file
+
+- name: Install GitLab dependencies
+  apt: "name={{ item }} state=installed"
+  with_items:
+    - openssh-server
+    - postfix
+    - curl
+
+- name: Create git group
+  group: name=git gid=511
+
+- name: Create git user
+  user: name=git uid=511 group=git
+
+- name: Download GitLab repository installation script
+  get_url:
+    url: "{{ gitlab_repository_installation_script_url }}"
+    dest: /tmp/gitlab_install_repository.sh
+  when: (gitlab_file.stat.exists == false)
+
+- name: Install GitLab repository
+  command: bash /tmp/gitlab_install_repository.sh
+  when: (gitlab_file.stat.exists == false)
+
+- name: Install GitLab
+  apt: "name=gitlab-ce state=installed"
+  when: (gitlab_file.stat.exists == false)

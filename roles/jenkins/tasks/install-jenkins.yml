@@ -1,0 +1,24 @@
+---
+
+- name: Create Jenkins group
+  group: name={{ jenkins_user }} gid=516
+
+
+- name: Create Jenkins user
+  user: name={{ jenkins_user }} uid=516 group={{ jenkins_group }}
+
+- name: Ensure apt cache is up to date
+  apt: update_cache=yes
+
+- name: Ensure dependencies are installed.
+  apt: pkg=curl state=installed
+  with_items:
+    - curl
+    - openjdk-7-jre-headless
+    - daemon
+
+- name: download Jenkins deb package
+  get_url: url={{ jenkins_deb_url }} dest=/tmp/{{ jenkins_deb_package }} checksum="sha1:{{ jenkins_deb_package_checksum }}"
+
+- name: Install Jenkins
+  apt: deb=/tmp/{{ jenkins_deb_package }} state=installed

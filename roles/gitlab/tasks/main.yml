@@ -1,0 +1,9 @@
+---
+- name: Include OS-specific variables.
+  include_vars: main.yml
+
+- include: install-gitlab.yml
+  become: yes
+
+- include: configure-gitlab.yml
+  become: yes

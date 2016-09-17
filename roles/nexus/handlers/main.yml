@@ -1,0 +1,12 @@
+---
+# handlers file for nexus
+
+- name: 'start nexus'
+  service: name=nexus state=started
+  become: yes
+  tags:
+    - init
+
+- name: 'restart nexus'
+  service: name=nexus state=restarted
+  become: yes

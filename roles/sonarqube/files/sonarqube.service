@@ -1,0 +1,11 @@
+[Unit]
+Description=Sonarqube
+
+[Service]
+Type=oneshot
+ExecStart=/etc/init.d/sonarqube start
+ExecStop=/etc/init.d/sonarqube stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

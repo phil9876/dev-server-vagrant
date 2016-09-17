@@ -1,0 +1,30 @@
+---
+
+- name: Create service file in /etc/init.d
+  template: src=sonarqube.j2 dest=/etc/init.d/sonarqube mode=u+x
+
+- name: Create .service file in /etc/serviced/service
+  copy: src=sonarqube.service dest=/etc/systemd/system
+
+- name: Copy config files
+  template: dest={{ sonarqube_install_dir }}/conf/{{ item }} src={{ item }}.j2
+  with_items:
+  - sonar.properties
+  - wrapper.conf
+
+- name: Change onership of files
+  file: path={{ sonarqube_install_dir }} state=directory recurse=yes owner={{ sonarqube_user }} group={{ sonarqube_group }}
+
+- name: Ensure apt repos up to date
+  apt: update_cache=yes
+
+- name: Install chkconfig
+  apt: name=chkconfig
+
+- name: Enable service
+  shell: systemctl enable sonarqube.service
+  notify: start sonarqube
+
+- name: Set Sonarqube to start automatically
+  shell: chkconfig --level 2345 sonarqube on
+  notify: start sonarqube
