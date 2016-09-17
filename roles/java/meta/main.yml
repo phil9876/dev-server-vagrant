@@ -1,0 +1,29 @@
+galaxy_info:
+  author: Phil Gilbert
+  description: Install open JDK on Debian
+
+  # Some suggested licenses:
+  # - BSD (default)
+  # - MIT
+  # - GPLv2
+  # - GPLv3
+  # - Apache
+  # - CC-BY
+  license:
+    BSD
+  
+  min_ansible_version: 1.2
+
+  github_branch: master
+
+  platforms:
+  - name: Debian
+    versions:
+    - all
+  
+  galaxy_tags:
+  - Java
+  - JDK
+
+
+dependencies: []

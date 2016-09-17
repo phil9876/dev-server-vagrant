@@ -1,0 +1,21 @@
+---
+
+- name: Copy list file
+  copy: src=java-debian.list dest=/etc/apt/sources.list.d
+  become: yes
+
+- name: Add key for new repo
+  apt_key: keyserver=keyserver.ubuntu.com id=EEA14886
+  become: yes
+
+- name: Update apt cache
+  apt: update_cache=yes
+  become: yes
+
+- name: Accept licence
+  debconf: name='{{ java_package }}' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+  become: yes
+
+- name: Install Java package
+  apt: name={{ java_package }} state=latest
+  become: yes
