@@ -1,0 +1,6 @@
+---
+# handlers file for sonarqube
+
+- name: start sonarqube
+  service: name=sonarqube state=started
+  become: yes

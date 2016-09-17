@@ -1,0 +1,6 @@
+---
+
+- name: Create sonar db user on postgres
+  shell: psql --command="ALTER USER postgres PASSWORD '{{ postgres_password }}';"
+  become: yes
+  become_user: "{{ postgres_user }}"

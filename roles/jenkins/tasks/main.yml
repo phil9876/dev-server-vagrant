@@ -1,0 +1,13 @@
+---
+
+- name: Include OS-Specific variables
+  include_vars: main.yml
+
+- include: install-jenkins.yml
+  become: yes
+
+- include: configure-jenkins.yml
+  become: yes
+
+- include: install-plugins.yml
+  become: yes

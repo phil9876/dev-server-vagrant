@@ -1,0 +1,10 @@
+---
+# tasks file for sonarqube
+
+- include: install-sonarqube.yml
+  become: yes
+
+- include: configure-postgres.yml
+
+- include: configure-sonarqube.yml
+  become: yes

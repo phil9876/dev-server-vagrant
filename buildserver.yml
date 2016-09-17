@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+  roles:
+    - java
+    - postgresql
+    - sonarqube
+    - jenkins
+    - { role: nexus, nexus_installation_dir: '/opt'}
+    - gitlab
+    # - gocd_agent
+    # - gocd_server
+    # - teamcity

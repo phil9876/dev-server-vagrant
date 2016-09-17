@@ -1,0 +1,9 @@
+---
+
+- name: Install config file
+  template: src=jenkins.conf.j2 dest=/etc/default/jenkins
+  notify: restart jenkins
+
+- name: install service file
+  template: src=jenkins.service.j2 dest=/etc/init.d/jenkins mode=0755
+  notify: restart jenkins
