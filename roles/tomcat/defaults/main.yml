@@ -1,6 +1,6 @@
 ---
 # defaults file for tomcat
 
-tomcat_version: '8.0.36'
-tomcat_checksum: 'c711970918f4c0ebd120cf35605795c416e342c8'
+tomcat_version: '8.0.37'
+tomcat_checksum: '1d3178ee1a6f9be638eaf078053ed11118560049'
 tomcat_java_home: '/usr/lib/jvm/java-8-oracle/jre'
