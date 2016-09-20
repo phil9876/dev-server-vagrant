@@ -17,7 +17,6 @@ jenkins_plugins:
   - workflow-aggregator
   - gradle
   - sonar
-  - cucumber
   - jacoco
   - nexus-artifact-uploader
   - repository-connector
