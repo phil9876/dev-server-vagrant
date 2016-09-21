@@ -1,0 +1,13 @@
+---
+
+- name: Install go agent
+  include: install-agent.yml
+  become: yes
+  tags:
+    - build
+
+- name: Configure go agent
+  include: config-agent.yml
+  become: yes
+  tags:
+    - configure

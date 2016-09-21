@@ -1,0 +1,11 @@
+[Unit]
+Description=Start and stop GOCD agent
+
+[Service]
+Type=oneshot
+ExecStart=/etc/init.d/go-agent-{{item}} start
+ExecStop=/etc/init.d/go-agent-{{item}} stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
