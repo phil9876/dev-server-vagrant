@@ -1,0 +1,6 @@
+---
+- include: install-mongo.yml
+  become: yes
+
+- include: configure-mongo.yml
+  become: yes
