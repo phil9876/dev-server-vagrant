@@ -1,0 +1,39 @@
+---
+
+- name: Ensure hostname is resolvable
+  lineinfile:
+    dest: /etc/hosts
+    line: "127.0.0.1 {{ ansible_hostname }}"
+
+- name: Create various directories
+  file:
+    group: "{{ gocd_server.group }}"
+    owner: "{{ gocd_server.user }}"
+    path: "/home/{{ gocd_server.user }}/{{ item }}"
+    state: directory
+  with_items:
+    - work/go-server
+    - bin
+    - .ssh
+
+- name: Configure SSH
+  copy:
+    src: ssh_config
+    dest: "/home/{{ gocd_server.user }}/.ssh/config"
+    group: "{{ gocd_server.group }}"
+    owner: "{{ gocd_server.user }}"
+    mode: "0600"
+
+- name: Ensures go-server configuration
+  template:
+    dest: "{{ item.dest }}"
+    group: "{{ gocd_server.group }}"
+    owner: "{{ gocd_server.user }}"
+    src: "{{ item.src }}"
+  with_items:
+    - src: defaults.j2
+      dest: /etc/default/go-server
+    - src: passwd.j2
+      dest: "/home/{{ gocd_server.user }}/passwd"
+  notify:
+    - restart go-server
