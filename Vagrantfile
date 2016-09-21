@@ -1,4 +1,4 @@
-# -*- mode: ruby -*-
+  # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
 file_root = File.dirname(File.expand_path(__FILE__))
@@ -17,8 +17,8 @@ Vagrant.configure(2) do |config|
     tomcat.vm.network "private_network", ip: "10.0.0.20"
 
     tomcat.vm.provider "virtualbox" do |vbox|
-      vbox.cpus = 2
-      vbox.memory = 4096
+      vbox.cpus = 1
+      vbox.memory = 2048
     end
 
     tomcat.vm.hostname = "tomcatserver"

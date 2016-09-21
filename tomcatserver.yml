@@ -2,10 +2,15 @@
 
 - hosts: all
   roles:
-    - java
-    - postgresql
-    - tomcat
+    #- java
+    #- postgresql
+    #- tomcat
+    - mongodb
 
-    # Working - mongodb
-    # Needs configuring- mysql
+
+
+    # Needs configuring - mysql
+    # Needs adding - mq
+    # Needs adding - rabbit
+    # Needs adding - amq
 

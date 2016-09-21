@@ -6,8 +6,11 @@
 - name: create tomcat user
   user: name=tomcat uid=515 group=tomcat
 
+- name: Install curl
+  apt: name=curl
+
 - name: Get Tomcat files
-  get_url: url=http://mirrors.muzzy.org.uk/apache/tomcat/tomcat-8/v{{tomcat_version}}/bin/apache-tomcat-{{tomcat_version}}.tar.gz
+  get_url: url={{ tomcat_download_url }}
     dest=/tmp/apache-tomcat-{{tomcat_version}}.tar.gz checksum="sha1:{{tomcat_checksum}}"
 
 - name: Unzip Tomcat files

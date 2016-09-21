@@ -1,0 +1,28 @@
+---
+- name: Import the public key used by the package management system
+  apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=EA312927
+
+- name: Check if list file for mongodb exists
+  stat: path=/etc/apt/sources.list.d/mongodb-org-3.2.list
+  register: listfile
+
+- name: Create a /etc/apt/sources.list.d/mongodb-org-3.2.list file for MongoDB
+  shell: echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.2 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+  when: (listfile.stat.exists == false)
+
+- name: Reload local package database
+  apt: update_cache=yes
+
+- name: Create mongodb group
+  group: name=mongodb gid=512
+
+
+- name: Create mongodb user
+  user: name=mongodb uid=512 group=mongodb
+
+- name: Update apt-cache
+  apt: update_cache=yes
+
+- name: Install the MongoDB packages
+  apt: name=mongodb-org
+  notify: Restart mongod

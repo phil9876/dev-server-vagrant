@@ -12,6 +12,9 @@
   #- MyTrustKeystore.jks
   - MyIdentityKeystore.jks
 
+- name: Empty logs folder
+  shell: rm -Rf /var/tomcat/logs/*
+
 - name: copy setenv script to Tomcat bin
   template: dest=/var/tomcat/bin src=setenv.sh.j2
 

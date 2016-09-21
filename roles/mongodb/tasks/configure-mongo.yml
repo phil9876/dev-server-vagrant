@@ -1,0 +1,5 @@
+---
+
+- name: Copy config file
+  template: dest=/etc/mongod.conf src=mongod.conf.j2
+  notify: Restart mongod
