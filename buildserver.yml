@@ -8,6 +8,6 @@
     - jenkins
     - { role: nexus, nexus_installation_dir: '/opt'}
     - gitlab
-    # Needs checking - gocd_agent
-    # Needs checking - gocd_server
-    # Needs checking  - teamcity
+    - gocd_agent
+    - gocd_server
+    - teamcity # Needs database config

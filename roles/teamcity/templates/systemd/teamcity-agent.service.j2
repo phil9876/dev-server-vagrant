@@ -1,0 +1,16 @@
+[Unit]
+Description=TeamCity Build Agent
+After=network.target
+
+[Service]
+Type=forking
+PIDFile={{teamcity_install_dir}}/TeamCity/buildAgent/logs/buildAgent.pid
+ExecStart={{teamcity_install_dir}}/TeamCity/buildAgent/bin/agent.sh start
+ExecStop={{teamcity_install_dir}}/TeamCity/buildAgent/bin/agent.sh stop
+User=teamcity
+Environment=JAVA_HOME={{java_home}}
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

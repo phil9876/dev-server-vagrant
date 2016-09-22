@@ -1,0 +1,16 @@
+[Unit]
+Description=TeamCity Server
+After=network.target
+
+[Service]
+Type=oneshot
+PIDFile={{teamcity_install_dir}}/TeamCity/logs/teamcity-server.pid
+; Make sure the CATALINA_PID env variable is setup in {{teamcity_install_dir}}/TeamCity/bin/catalina.sh
+ExecStart={{teamcity_install_dir}}/TeamCity/bin/teamcity-server.sh start
+ExecStop={{teamcity_install_dir}}/TeamCity/bin/teamcity-server.sh stop
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+User=teamcity
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
