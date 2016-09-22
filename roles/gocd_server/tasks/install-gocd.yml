@@ -1,0 +1,40 @@
+---
+
+- name: Ensure hostname is resolvable
+  become: yes
+  lineinfile:
+    dest: /etc/hosts
+    line: "127.0.0.1 {{ ansible_hostname }}"
+
+- name: Ensure group exists
+  group:
+    name: "{{ gocd_server.group }}"
+
+- name: Ensure user exists
+  user:
+    name: "{{ gocd_server.user }}"
+    group: "{{ gocd_server.group }}"
+
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+  with_items: "{{ gocd_server.packages }}"
+
+- name: Add the apt key for the GoCD repo
+  apt_key: url=https://download.go.cd/GOCD-GPG-KEY.asc
+
+- name: add GO CD apt repository
+  apt_repository:
+    repo: deb https://download.go.cd/ /
+    state: present
+
+- name: Install go-server
+  apt:
+    name: "go-server={{ gocd_server.version }}"
+    state: present
+
+- name: Add go-server to autostart
+  service:
+    name: go-server
+    enabled: yes
+    state: stopped

@@ -1,0 +1,23 @@
+---
+
+gocd_server:
+  group: go
+  java_home: /usr/lib/jvm/java-8-oracle/jre
+  port_ssl: 8154
+  port: 8153
+  server_max_mem: 512m
+  server_max_perm_gen: 128m
+  server_mem: 256m
+  server_min_perm_gen: 128m
+  user: go
+  version: "16.9.0-4001"
+
+  packages:
+    - git
+    - tree
+    - python-pip
+    - apt-transport-https
+    - curl
+
+  passwd_users:
+    backup: "{SHA}iRIdyZx9uc4lU6CToqsp4H99808="
