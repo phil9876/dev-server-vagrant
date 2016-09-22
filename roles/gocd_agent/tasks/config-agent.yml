@@ -1,0 +1,95 @@
+---
+
+- name: Set hostname
+  become: yes
+  lineinfile:
+    dest: /etc/hosts
+    line: "127.0.0.1 {{ ansible_hostname }}"
+
+- name: Ensures go-agent configuration
+  become: yes
+  template:
+    dest: /etc/default/go-agent
+    group: "{{ gocd_agent.user }}"
+    owner: "{{ gocd_agent.user }}"
+    src: defaults.j2
+  notify:
+    - restart go-agent
+
+- name: Grab IP of GOCD Server
+  shell: "aws ec2 describe-instances --region eu-west-1 --filters {{ gocd_agent.aws.gocd_server_lookup_filter }} --output text --query 'Reservations[*].Instances[*].PrivateIpAddress'"
+  register: gocd_server_ip
+  when: gocd_agent.aws.gocd_server_lookup_filter
+
+- name: Set IP of GOCD server
+  set_fact:
+    gocd_agent:
+      server: "{{ gocd_server_ip.stdout }}"
+  when: gocd_agent.aws.gocd_server_lookup_filter
+
+- name: Create .ssh directory
+  become: yes
+  file:
+    group: "{{ gocd_agent.user }}"
+    owner: "{{ gocd_agent.user }}"
+    path: "/home/{{ gocd_agent.user }}/.ssh"
+    state: directory
+
+- name: Configure SSH
+  become: yes
+  copy:
+    src: ssh_config
+    dest: "/home/{{ gocd_agent.user }}/.ssh/config"
+    group: "{{ gocd_agent.user }}"
+    owner: "{{ gocd_agent.user }}"
+    mode: "0600"
+
+- name: Add config folder for agents
+  become: yes
+  become_user: "{{ gocd_agent.user }}"
+  file:
+    name: "/home/{{ gocd_agent.user }}/work/go-agent-{{ item }}/config"
+    state: directory
+  with_sequence: count="{{ gocd_agent.no_of_agents }}"
+  when: gocd_agent.auto_register.key
+
+- name: Configure auto registration
+  become: yes
+  become_user: "{{ gocd_agent.user }}"
+  template:
+    dest: "/home/{{ gocd_agent.user }}/work/go-agent-{{ item }}/config/autoregister.properties"
+    src: autoregister.properties.j2
+  with_sequence: count="{{ gocd_agent.no_of_agents }}"
+  when: gocd_agent.auto_register.key
+  notify:
+    - restart go-agent
+
+- name: Configure Git for Go CD user
+  become: yes
+  become_user: "{{ gocd_agent.user }}"
+  template:
+    dest: /home/{{ gocd_agent.user }}/.gitconfig
+    src: gitconfig.j2
+
+- name: Create defaults file for additional agents
+  become: yes
+  template:
+    dest: /etc/default/go-agent-{{ item }}
+    src: defaults.j2
+  with_sequence: count="{{ gocd_agent.no_of_agents }}"
+
+- name: Install chkconfig
+  apt: name=chkconfig
+  become: yes
+
+- name: Install .service files
+  template: src=go-agent.service.j2 dest=/etc/systemd/system/go-agent-{{item}}.service
+  with_sequence: count="{{ gocd_agent.no_of_agents }}"
+  become: yes
+
+- name: Ensure all the agents are started
+  become: yes
+  service:
+    name: "go-agent-{{ item }}"
+    state: started
+  with_sequence: count="{{ gocd_agent.no_of_agents }}"

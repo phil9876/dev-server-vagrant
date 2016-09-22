@@ -1,0 +1,13 @@
+---
+
+- name: Install go server
+  include: install-gocd.yml
+  become: yes
+  tags:
+    - build
+
+- name: Configure go server
+  include: config-gocd.yml
+  become: yes
+  tags:
+    - configure
